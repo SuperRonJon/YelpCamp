@@ -21,23 +21,19 @@ router.get('/', middleware.checkAdmin, function(req, res){
     });
 });
 
+//SHOW THE PROMOTION PAGE
 router.get('/promote', middleware.checkAdmin, function(req, res){
     Users.find({}, function(err, users){
         if(err){
             console.log(err);
             res.redirect('back');
         } else {
-            var admins = [];
-            users.forEach(function(user){
-                if(user.isAdmin){
-                    admins.push(user);
-                }
-            });
             res.render('admin/promote', {users: users});
         }
     });
 });
 
+//PROMOTE USER TO ADMIN
 router.put('/:admin_id', middleware.checkAdmin, function (req, res) {
     Users.findByIdAndUpdate(req.params.admin_id, {$set: { isAdmin: true }}, function(err, updatedAdmin){
         if(err){

@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var Users = require('../models/user');
+var User = require('../models/user');
 var middleware = require('../middleware');
+var passport = require('passport');
 
 //INDEX
 router.get('/', middleware.checkAdmin, function(req, res){
-    Users.find({}, function (err, users){
+    User.find({}, function (err, users){
         if(err){
             console.log(err);
             res.redirect('back');
@@ -21,9 +22,28 @@ router.get('/', middleware.checkAdmin, function(req, res){
     });
 });
 
+//ADMIN REGISTER NEW ROUTE
+router.get('/register', middleware.checkAdmin, function(req, res){
+    res.render('admin/register');
+});
+
+//ADMIN REGISTER POST ROUTE
+router.post('/register', function(req, res){
+    User.register(new User({username: req.body.username, isAdmin: true}), req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            req.flash('error', err.message);
+            res.redirect('/admin/register');
+        } else {
+            req.flash('success', 'New admin registered');
+            res.redirect('/admin');
+        }
+    });
+});
+
 //SHOW THE PROMOTION PAGE
 router.get('/promote', middleware.checkAdmin, function(req, res){
-    Users.find({}, function(err, users){
+    User.find({}, function(err, users){
         if(err){
             console.log(err);
             res.redirect('back');
@@ -35,7 +55,7 @@ router.get('/promote', middleware.checkAdmin, function(req, res){
 
 //PROMOTE USER TO ADMIN
 router.put('/:admin_id', middleware.checkAdmin, function (req, res) {
-    Users.findByIdAndUpdate(req.params.admin_id, {$set: { isAdmin: true }}, function(err, updatedAdmin){
+    User.findByIdAndUpdate(req.params.admin_id, {$set: { isAdmin: true }}, function(err, updatedAdmin){
         if(err){
             console.log(err);
             req.flash('error', 'Something went wrong');
@@ -47,7 +67,7 @@ router.put('/:admin_id', middleware.checkAdmin, function (req, res) {
 
 //ADMIN DELETION, REMOVE ADMIN STATUS FROM AN ACCOUNT
 router.delete('/:admin_id', middleware.checkAdmin, function(req, res){
-    Users.findByIdAndUpdate(req.params.admin_id, { $set: { isAdmin: false }}, function(err, updatedAdmin){
+    User.findByIdAndUpdate(req.params.admin_id, { $set: { isAdmin: false }}, function(err, updatedAdmin){
         if(err){
             console.log(err);
             req.flash('error', 'Something went wrong');

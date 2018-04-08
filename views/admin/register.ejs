@@ -1,0 +1,21 @@
+<%include ../partials/header%>
+<div class="container">
+        <div class="row">
+            <div class="form-full">
+                <h1>Register New Admin Account</h1>
+                <form action="/admin/register" method="POST">
+                    <div class="form-group">
+                        <input id="username" class="form-control" type="text" name="username" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <input id="password" class="form-control" type="password" name="password" placeholder="Password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-lg btn-block">Submit!</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<%include ../partials/footer%>

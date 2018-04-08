@@ -38,6 +38,17 @@ router.get('/promote', middleware.checkAdmin, function(req, res){
     });
 });
 
+router.put('/:admin_id', middleware.checkAdmin, function (req, res) {
+    Users.findByIdAndUpdate(req.params.admin_id, {$set: { isAdmin: true }}, function(err, updatedAdmin){
+        if(err){
+            console.log(err);
+            req.flash('error', 'Something went wrong');
+        } else {
+            res.redirect('admin/promote');
+        }
+    });
+});
+
 //ADMIN DELETION, REMOVE ADMIN STATUS FROM AN ACCOUNT
 router.delete('/:admin_id', middleware.checkAdmin, function(req, res){
     Users.findByIdAndUpdate(req.params.admin_id, { $set: { isAdmin: false }}, function(err, updatedAdmin){

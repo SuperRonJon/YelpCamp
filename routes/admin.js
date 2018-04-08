@@ -33,7 +33,7 @@ router.get('/promote', middleware.checkAdmin, function(req, res){
                     admins.push(user);
                 }
             });
-            res.render('/admin/promote', {admins: admins});
+            res.render('admin/promote', {users: users});
         }
     });
 });

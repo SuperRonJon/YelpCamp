@@ -1,0 +1,28 @@
+<% include ../partials/header %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Admin Controls</p>
+            <div class="list-group">
+                <a href="#" class="list-group-item active">Home</a>
+                <a href="#" class="list-group-item">Add new admin</a>
+                <a href="#" class="list-group-item">Upgrade user to admin</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <ul class="list-group list-group-flush">
+                <% admins.forEach(function(admin){ %>
+                    <li class="list-group-item">
+                        <%=admin.username%>
+                        <form class="delete-form" action="/admin/<%=admin._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-xs btn-danger pull-right">Remove</button>
+                        </form>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>
+        
+        

@@ -24,6 +24,20 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next){
     }
 }
 
+middlewareObj.checkAdmin = function(req, res, next){
+    if(req.isAuthenticated()){
+        if(req.user.isAdmin){
+            next();
+        } else {
+            req.flash("error", "You do not have permission to access this.");
+            res.redirect("back");
+        }
+    } else {
+        req.flash("error", "You are not logged in.");
+        res.redirect("back");
+    }
+}
+
 middlewareObj.checkCommentOwnership = function(req, res, next){
     if(req.isAuthenticated()){
         Comment.findById(req.params.comment_id, function(err, foundComment){

@@ -17,8 +17,8 @@ var commentRoutes    = require('./routes/comments'),
     adminRoutes      = require('./routes/admin');
     
 //seedDB(); //seed the database
-//var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp"
-var url = "mongodb://localhost/yelp_camp_admin";
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp"
+//var url = "mongodb://localhost/yelp_camp_admin";
 mongoose.connect(url);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));

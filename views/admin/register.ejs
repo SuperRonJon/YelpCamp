@@ -1,6 +1,14 @@
 <%include ../partials/header%>
 <div class="container">
         <div class="row">
+            <div class="col-md-3">
+                <p class="lead">Admin Controls</p>
+                <div class="list-group">
+                    <a href="/admin" class="list-group-item">Home</a>
+                    <a href="#" class="list-group-item active">Add new admin</a>
+                    <a href="/admin/promote" class="list-group-item">Upgrade user to admin</a>
+                </div>
+            </div>
             <div class="form-full">
                 <h1>Register New Admin Account</h1>
                 <form action="/admin/register" method="POST">

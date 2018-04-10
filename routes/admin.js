@@ -60,7 +60,7 @@ router.put('/:admin_id', middleware.checkAdmin, function (req, res) {
             console.log(err);
             req.flash('error', 'Something went wrong');
         } else {
-            res.redirect('admin/promote');
+            res.redirect('/admin/promote/');
         }
     });
 });

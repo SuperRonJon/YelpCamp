@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Campground = require('../models/campground');
 var middleware = require('../middleware');
+var User = require('../models/user');
 
 //INDEX
 router.get('/', function(req, res){
@@ -17,24 +18,35 @@ router.get('/', function(req, res){
 
 //CREATE
 router.post('/', middleware.isLoggedIn, function(req, res){
-   //get data from form and add to campgrounds array
-   var name = req.body.name;
-   var image = req.body.image;
-   var desc = req.body.desc;
-   var author = {
-       id: req.user._id,
-       username: req.user.username
-   };
-   var newCampground = {name: name, image: image, description: desc, author: author};
-   //create a new campground and save to database
-   Campground.create(newCampground, function(err, newlyCreated){
-       if(err){
-           console.log(err);
-       } else {
-           //redirect back to campgrounds page.
-           res.redirect('/campgrounds');
-       }
-   });
+    User.findById(req.user._id, function(err, user){
+        if(err){
+            req.flash('error', 'Something went wrong');
+            res.redirect('/campgrounds');
+        } else {
+            //get data from form and add to campgrounds array
+            var name = req.body.name;
+            var image = req.body.image;
+            var desc = req.body.desc;
+            var author = {
+               id: req.user._id,
+               username: req.user.username
+            };
+            var newCampground = {name: name, image: image, description: desc, author: author};
+            //create a new campground and save to database
+            Campground.create(newCampground, function(err, newlyCreated){
+               if(err){
+                   console.log(err);
+               } else {
+                   //add campground to user profile
+                   user.campgrounds.push(newlyCreated);
+                   console.log(user);
+                   //redirect back to campgrounds page.
+                   res.redirect('/campgrounds');
+               }
+           });
+        }
+    });
+   
 });
 
 //NEW
@@ -50,7 +62,6 @@ router.get('/:id', function(req, res){
             req.flash("error", "Campground not found");
             res.redirect("/campgrounds");
         } else {
-            console.log(foundCampground);
             //render show template with that campground
             res.render('campgrounds/show', {campground: foundCampground});
         }
